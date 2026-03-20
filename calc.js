@@ -31,7 +31,7 @@ const PRECEDENCE = {
     "-": 1,
     "*": 2,
     "/": 2,
-    "^": 3,
+    "^": 4,
     neg: 4
 };
 const ASSOCIATIVITY = {
@@ -758,6 +758,11 @@ function evaluateMathExpression(expression, xValue = 0) {
     return evaluateRpn(rpn, xValue);
 }
 
+function compileMathExpression(expression) {
+    const tokens = tokenizeExpression(expression);
+    return toRpn(tokens);
+}
+
 function captureLastOperation(tokens) {
     if (tokens.length < 3) {
         state.lastOperator = "";
@@ -908,7 +913,7 @@ function toCanvasY(y, bounds, height) {
     return height - ((y - bounds.minY) / (bounds.maxY - bounds.minY)) * height;
 }
 
-function sampleFunction(expression, range, width) {
+function sampleFunction(compiledExpression, range, width) {
     const sampleCount = Math.max(280, Math.floor(width));
     const points = [];
 
@@ -916,7 +921,7 @@ function sampleFunction(expression, range, width) {
         const x = range.xMin + ((range.xMax - range.xMin) * index) / sampleCount;
 
         try {
-            const y = evaluateMathExpression(expression, x);
+            const y = evaluateRpn(compiledExpression, x);
 
             if (Number.isFinite(y)) {
                 points.push({ x, y });
@@ -935,7 +940,7 @@ function getVerticalBounds(points) {
     const validPoints = points.filter(Boolean);
 
     if (validPoints.length === 0) {
-        return { minY: -10, maxY: 10 };
+        throw new Error("La funcion no produce valores validos en ese rango");
     }
 
     let minY = Math.min(...validPoints.map((point) => point.y));
@@ -1042,7 +1047,7 @@ function drawFunctionPath(context, width, height, range, bounds, points) {
     context.stroke();
 }
 
-function updateFunctionEvaluation(expression) {
+function updateFunctionEvaluation(compiledExpression) {
     const xValue = Number(evalXInput.value);
 
     if (!Number.isFinite(xValue)) {
@@ -1051,7 +1056,7 @@ function updateFunctionEvaluation(expression) {
     }
 
     try {
-        const result = formatNumber(evaluateMathExpression(expression, xValue));
+        const result = formatNumber(evaluateRpn(compiledExpression, xValue));
         graphResult.textContent = `f(${formatNumber(xValue)}) = ${result}`;
     } catch (error) {
         graphResult.textContent = error.message;
@@ -1066,14 +1071,15 @@ function renderGraph() {
             throw new Error("Escribe una funcion");
         }
 
+        const compiledExpression = compileMathExpression(expression);
         const range = getGraphRange();
         const { context, width, height } = resizeCanvas();
-        const points = sampleFunction(expression, range, width);
+        const points = sampleFunction(compiledExpression, range, width);
         const bounds = getVerticalBounds(points);
 
         drawGraphAxes(context, width, height, range, bounds);
         drawFunctionPath(context, width, height, range, bounds, points);
-        updateFunctionEvaluation(expression);
+        updateFunctionEvaluation(compiledExpression);
         updateGraphStatus("Funcion representada correctamente");
     } catch (error) {
         const { context, width, height } = resizeCanvas();
@@ -1283,7 +1289,20 @@ graphShortcuts.addEventListener("click", (event) => {
 
 plotFunctionButton.addEventListener("click", renderGraph);
 functionInput.addEventListener("input", renderGraph);
-evalXInput.addEventListener("input", () => updateFunctionEvaluation(functionInput.value.trim()));
+evalXInput.addEventListener("input", () => {
+    try {
+        const expression = functionInput.value.trim();
+
+        if (!expression) {
+            graphResult.textContent = "Escribe una funcion";
+            return;
+        }
+
+        updateFunctionEvaluation(compileMathExpression(expression));
+    } catch (error) {
+        graphResult.textContent = error.message;
+    }
+});
 xMinInput.addEventListener("input", renderGraph);
 xMaxInput.addEventListener("input", renderGraph);
 clearHistoryButton.addEventListener("click", clearHistory);
