@@ -1,214 +1,377 @@
-/* 1. Configuración general y nueva tipografía */
-body {
-    margin: 0;
-    /* NUEVO: Usamos la fuente Poppins cargada de Google Fonts */
-    font-family: 'Poppins', sans-serif;
-    background-color: #2c3e50;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* Usamos min-height para asegurar que ocupe todo el alto */
+:root {
+    --bg-main: #09111f;
+    --bg-panel: rgba(11, 23, 39, 0.82);
+    --bg-panel-strong: rgba(7, 16, 29, 0.9);
+    --bg-display: rgba(2, 8, 17, 0.88);
+    --color-text: #eef4ff;
+    --color-muted: #9ab0ce;
+    --color-accent: #6ee7b7;
+    --color-accent-strong: #1ec28b;
+    --color-warm: #ffb45c;
+    --color-danger: #ff7676;
+    --shadow-panel: 0 24px 70px rgba(0, 0, 0, 0.35);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.22);
+    --border-soft: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* NUEVO: Estilos para el nuevo contenedor principal */
-.contenedor-principal {
-    display: flex;
-    flex-direction: column; /* Alinea los elementos (título y calculadora) en columna */
-    align-items: center; /* Centra horizontalmente */
-    gap: 20px; /* Espacio entre el título y la calculadora */
-}
-
-/* NUEVO: Estilos específicos para el título */
-.titulo-pagina {
-    color: white;
-    font-size: 2.5rem; /* Tamaño grande */
-    font-weight: 600; /* Grosor semi-negrita */
-    margin: 0;
-    text-transform: uppercase; /* Todo en mayúsculas para un look más moderno */
-    letter-spacing: 2px; /* Espaciado entre letras */
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Pequeña sombra para dar profundidad */
-}
-
-/* --- EL RESTO DE TU CSS SIGUE IGUAL ABAJO --- */
-
-/* 2. El cuerpo de la calculadora */
-.calculadora {
-    background-color: #1a1a1a;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.5);
-    width: 300px;
-}
-
-/* 3. Estilo de la pantalla (Display) - Actualizado para usar la nueva fuente */
-#display {
-    width: 100%;
-    height: 60px;
-    background-color: #333;
-    color: #00ff00;
-    border: none;
-    text-align: right;
-    padding: 10px;
-    padding-right: 20px;
-    /* Actualizado: */
-    font-family: 'Poppins', sans-serif; 
-    font-size: 2.5rem;
-    font-weight: 300; /* Más fina para que parezca un LCD digital */
-    
-    border-radius: 5px;
-    margin-bottom: 20px;
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
-/* (El resto de estilos de botones .botones, button, button:hover, etc., se mantienen igual) */
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Space Grotesk", sans-serif;
+    color: var(--color-text);
+    background:
+        radial-gradient(circle at top left, rgba(30, 194, 139, 0.18), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(255, 180, 92, 0.2), transparent 30%),
+        linear-gradient(145deg, #040915 0%, #09111f 40%, #111d31 100%);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+.app-shell {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 40px 0 48px;
+}
+
+.hero {
+    max-width: 760px;
+    margin-bottom: 28px;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.titulo-pagina {
+    margin: 0;
+    font-size: clamp(2.4rem, 6vw, 4.8rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+}
+
+.intro {
+    max-width: 52ch;
+    margin: 18px 0 0;
+    color: var(--color-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.area-trabajo {
+    display: grid;
+    grid-template-columns: minmax(320px, 390px) minmax(300px, 1fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.panel {
+    position: relative;
+    overflow: hidden;
+    border: var(--border-soft);
+    border-radius: 28px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(18px);
+    box-shadow: var(--shadow-panel);
+}
+
+.panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), transparent 36%);
+    pointer-events: none;
+}
+
+.calculadora,
+.historial-container {
+    padding: 24px;
+}
+
+.display-shell {
+    padding: 18px;
+    border-radius: 22px;
+    background: var(--bg-display);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.expression {
+    min-height: 24px;
+    margin-bottom: 10px;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+}
+
+#display {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(2rem, 8vw, 3.2rem);
+    font-weight: 600;
+    outline: none;
+    padding: 0;
+}
+
+.status {
+    margin: 8px 0 0;
+    min-height: 20px;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+.status[data-state="error"] {
+    color: var(--color-danger);
+}
+
 .botones {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
 }
 
-button {
-    padding: 20px;
-    /* Actualizado: */
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 400;
-    
-    border: none;
-    border-radius: 8px;
+.btn {
+    min-height: 68px;
+    border: 0;
+    border-radius: 20px;
+    color: var(--color-text);
     cursor: pointer;
-    background-color: #444;
-    color: white;
-    transition: background 0.2s;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
 
-button:hover {
-    background-color: #666;
+.btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:focus-visible,
+.btn-clear-history:focus-visible,
+.historial-item:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
 }
 
 .btn-operator {
-    background-color: #f39c12;
-}
-
-.btn-operator:hover {
-    background-color: #e67e22;
+    background: linear-gradient(180deg, rgba(255, 180, 92, 0.92), rgba(255, 145, 0, 0.84));
+    color: #1b1000;
+    font-weight: 700;
 }
 
 .btn-equal {
-    grid-column: span 2;
-    background-color: #27ae60;
-}
-
-.btn-equal:hover {
-    background-color: #219150;
+    grid-row: span 2;
+    background: linear-gradient(180deg, rgba(110, 231, 183, 0.98), rgba(30, 194, 139, 0.9));
+    color: #042114;
+    font-size: 1.6rem;
+    font-weight: 700;
 }
 
 .btn-clear {
-    grid-column: span 3; /* He cambiado el span a 2 para equilibrar el diseño con '=' ocupando 2 */
-    background-color: #c0392b;
+    background: linear-gradient(180deg, rgba(255, 118, 118, 0.95), rgba(215, 61, 61, 0.82));
 }
 
-.btn-clear:hover {
-    background-color: #a93226;
+.btn-delete {
+    background: linear-gradient(180deg, rgba(143, 168, 204, 0.34), rgba(77, 94, 121, 0.3));
 }
 
+.btn-scientific,
+.btn-sign {
+    background: linear-gradient(180deg, rgba(110, 136, 255, 0.22), rgba(70, 90, 180, 0.12));
+    color: #dbe5ff;
+}
 
-/* --- NUEVOS ESTILOS PARA EL LAYOUT Y EL HISTORIAL --- */
+.btn-zero {
+    grid-column: span 2;
+}
 
-/* Contenedor que alinea Calculadora e Historial side-by-side */
-.area-trabajo {
+.atajos {
     display: flex;
-    gap: 30px; /* Espacio entre los dos paneles */
-    align-items: flex-start; /* Alinea los paneles arriba */
-    flex-wrap: wrap; /* Para que en móviles se pongan uno debajo del otro */
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
 }
 
-/* Contenedor principal del historial */
+.atajos span {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-muted);
+    font-size: 0.8rem;
+}
+
 .historial-container {
-    background-color: #1a1a1a; /* Mismo color de fondo que la calculadora */
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.5);
-    width: 300px; /* Mismo ancho que la calculadora */
-    height: 440px; /* Altura similar para que se vea equilibrado */
     display: flex;
     flex-direction: column;
+    min-height: 100%;
+    background: var(--bg-panel-strong);
 }
 
-.historial-container h2 {
-    color: #f39c12; /* Color de los operadores para cohesión */
-    margin-top: 0;
-    font-size: 1.5rem;
-    text-align: center;
-    border-bottom: 2px solid #333;
-    padding-bottom: 10px;
+.historial-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
 }
 
-/* Estilo específico del bloc de notas (la lista ul) */
-.bloc-notas {
-    list-style: none;
-    padding: 0;
+.historial-header h2 {
     margin: 0;
-    flex-grow: 1; /* Ocupa todo el espacio vertical disponible */
-    overflow-y: auto; /* Permite scroll si hay muchas operaciones */
-    
-    /* Efecto de líneas de cuaderno */
-    background-image: linear-gradient(#333 1px, transparent 1px);
-    background-size: 100% 30px; /* Altura de cada línea */
-    line-height: 30px; /* Alinea el texto con la línea */
-    padding-left: 10px;
+    font-size: 2rem;
+    line-height: 1;
 }
 
-/* Cada entrada del historial */
-.bloc-notas li {
-    color: #aaa; /* Color de texto sutil */
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    border-bottom: 1px solid rgba(255,255,255,0.05); /* Línea divisoria muy tenue */
-    padding-right: 10px;
-    word-wrap: break-word; /* Rompe palabras largas si es necesario */
-    cursor: pointer; /* Cambia el cursor a una mano */
-    transition: background 0.2s, color 0.2s;
-    padding: 5px 10px;
-    border-radius: 4px;
-}
-
-/* Botón para borrar el historial */
 .btn-clear-history {
-    background-color: transparent;
-    border: 2px solid #c0392b;
-    color: #c0392b;
-    padding: 10px;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 118, 118, 0.45);
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: rgba(255, 118, 118, 0.08);
+    color: #ffd3d3;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    margin-top: 15px;
-    transition: all 0.2s;
+    transition: background 0.18s ease, transform 0.18s ease;
 }
 
 .btn-clear-history:hover {
-    background-color: #c0392b;
-    color: white;
+    transform: translateY(-1px);
+    background: rgba(255, 118, 118, 0.16);
 }
 
-/* Scrollbar personalizado para el historial (para que se vea pro) */
+.bloc-notas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+    flex: 1;
+    overflow: auto;
+}
+
+.historial-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.historial-item:hover {
+    transform: translateX(3px);
+    border-color: rgba(110, 231, 183, 0.42);
+    background: rgba(110, 231, 183, 0.08);
+}
+
+.historial-expresion {
+    color: var(--color-muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.92rem;
+}
+
+.historial-resultado {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.historial-vacio {
+    margin: 0;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-muted);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 .bloc-notas::-webkit-scrollbar {
-    width: 8px;
-}
-
-.bloc-notas::-webkit-scrollbar-track {
-    background: #1a1a1a;
+    width: 10px;
 }
 
 .bloc-notas::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
 }
 
-/* Efecto al pasar el ratón sobre una operación */
-.bloc-notas li:hover {
-    background-color: rgba(243, 156, 18, 0.2); /* Un toque naranja transparente */
-    color: white;
+@media (max-width: 900px) {
+    .area-trabajo {
+        grid-template-columns: 1fr;
+    }
+
+    .historial-container {
+        min-height: 320px;
+    }
+}
+
+@media (max-width: 560px) {
+    .app-shell {
+        width: min(100% - 20px, 1180px);
+        padding-top: 24px;
+    }
+
+    .calculadora,
+    .historial-container {
+        padding: 18px;
+    }
+
+    .btn {
+        min-height: 60px;
+        border-radius: 18px;
+    }
+
+    .atajos {
+        gap: 6px;
+    }
+
+    .atajos span {
+        font-size: 0.76rem;
+    }
+
+    .historial-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-clear-history {
+        width: 100%;
+    }
 }

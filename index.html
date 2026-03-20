@@ -3,52 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Calculadora JS</title>
-    
+    <title>Calculadora Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stiloscal.css">
 </head>
 <body>
+    <main class="app-shell">
+        <section class="hero">
+            <p class="eyebrow">Proyecto calculadora</p>
+            <h1 class="titulo-pagina">Rapida, clara y lista para trabajar con teclado</h1>
+            <p class="intro">
+                Operaciones fiables, historial persistente y una interfaz mas limpia para uso diario.
+            </p>
+        </section>
 
-    <div class="contenedor-principal">
-        <h1 class="titulo-pagina">Calculadora Pro</h1>
-        
-        <div class="area-trabajo">
-            
-            <div class="calculadora">
-                <input type="text" id="display" readonly value="0">
-                <div class="botones">
-                    <button class="btn-clear" onclick="limpiar()">C</button>
-                    <button class="btn-operator" onclick="operar('/')">/</button>
-                    <button onclick="agregar('7')">7</button>
-                    <button onclick="agregar('8')">8</button>
-                    <button onclick="agregar('9')">9</button>
-                    <button class="btn-operator" onclick="operar('*')">*</button>
-                    <button onclick="agregar('4')">4</button>
-                    <button onclick="agregar('5')">5</button>
-                    <button onclick="agregar('6')">6</button>
-                    <button class="btn-operator" onclick="operar('-')">-</button>
-                    <button onclick="agregar('1')">1</button>
-                    <button onclick="agregar('2')">2</button>
-                    <button onclick="agregar('3')">3</button>
-                    <button class="btn-operator" onclick="operar('+')">+</button>
-                    <button onclick="agregar('0')">0</button>
-                    <button onclick="agregar('.')">.</button>
-                    <button class="btn-equal" onclick="calcular()">=</button>
+        <section class="area-trabajo" aria-label="Zona principal de la calculadora">
+            <article class="panel calculadora" aria-label="Calculadora">
+                <div class="display-shell">
+                    <label class="sr-only" for="display">Pantalla de la calculadora</label>
+                    <div id="expression" class="expression" aria-live="polite"></div>
+                    <input type="text" id="display" readonly value="0" aria-label="Resultado actual">
+                    <p id="status" class="status" aria-live="polite">Lista para calcular</p>
                 </div>
-            </div>
 
-            <div class="historial-container">
-                <h2><i class="fas fa-history"></i> Historial</h2>
-                <ul id="lista-historial" class="bloc-notas">
-                    </ul>
-                <button class="btn-clear-history" onclick="limpiarHistorial()">Borrar Historial</button>
-            </div>
-        </div>
-    </div>
+                <div class="botones" id="botones-calculadora">
+                    <button type="button" class="btn btn-clear" data-action="clear">C</button>
+                    <button type="button" class="btn btn-delete" data-action="delete">DEL</button>
+                    <button type="button" class="btn btn-scientific" data-action="open-parenthesis">(</button>
+                    <button type="button" class="btn btn-scientific" data-action="close-parenthesis">)</button>
+                    <button type="button" class="btn btn-scientific" data-action="percentage">%</button>
+
+                    <button type="button" class="btn" data-value="7">7</button>
+                    <button type="button" class="btn" data-value="8">8</button>
+                    <button type="button" class="btn" data-value="9">9</button>
+                    <button type="button" class="btn btn-operator" data-operator="/">÷</button>
+                    <button type="button" class="btn btn-sign" data-action="toggle-sign">±</button>
+
+                    <button type="button" class="btn" data-value="4">4</button>
+                    <button type="button" class="btn" data-value="5">5</button>
+                    <button type="button" class="btn" data-value="6">6</button>
+                    <button type="button" class="btn btn-operator" data-operator="*">×</button>
+                    <button type="button" class="btn btn-equal" data-action="calculate">=</button>
+
+                    <button type="button" class="btn" data-value="1">1</button>
+                    <button type="button" class="btn" data-value="2">2</button>
+                    <button type="button" class="btn" data-value="3">3</button>
+                    <button type="button" class="btn btn-operator" data-operator="-">-</button>
+
+                    <button type="button" class="btn btn-zero" data-value="0">0</button>
+                    <button type="button" class="btn" data-value=".">.</button>
+                    <button type="button" class="btn btn-operator" data-operator="+">+</button>
+                </div>
+
+                <div class="atajos">
+                    <span>Atajos:</span>
+                    <span>`Enter` calcula</span>
+                    <span>`Backspace` borra</span>
+                    <span>`(` `)` agrupan</span>
+                    <span>`%` porcentaje</span>
+                </div>
+            </article>
+
+            <aside class="panel historial-container" aria-label="Historial de operaciones">
+                <div class="historial-header">
+                    <div>
+                        <p class="eyebrow">Memoria</p>
+                        <h2>Historial</h2>
+                    </div>
+                    <button type="button" class="btn-clear-history" id="clear-history">Borrar</button>
+                </div>
+
+                <ul id="lista-historial" class="bloc-notas"></ul>
+                <p id="historial-vacio" class="historial-vacio">Tus calculos apareceran aqui.</p>
+            </aside>
+        </section>
+    </main>
 
     <script src="calc.js"></script>
 </body>
