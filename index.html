@@ -15,7 +15,7 @@
             <p class="eyebrow">Proyecto calculadora</p>
             <h1 class="titulo-pagina">Rapida, clara y lista para trabajar con teclado</h1>
             <p class="intro">
-                Operaciones fiables, historial persistente y una interfaz mas limpia para uso diario.
+                Operaciones fiables, historial persistente y ahora tambien un espacio para representar funciones de forma visual.
             </p>
         </section>
 
@@ -28,18 +28,35 @@
                     <p id="status" class="status" aria-live="polite">Lista para calcular</p>
                 </div>
 
+                <div class="mode-switch" id="trig-mode-controls" aria-label="Modo trigonometrico">
+                    <button type="button" class="mode-btn" data-trig-mode="deg">Grados</button>
+                    <button type="button" class="mode-btn" data-trig-mode="rad">Radianes</button>
+                </div>
+
                 <div class="botones" id="botones-calculadora">
                     <button type="button" class="btn btn-clear" data-action="clear">C</button>
                     <button type="button" class="btn btn-delete" data-action="delete">DEL</button>
+                    <button type="button" class="btn btn-scientific" data-action="insert-constant" data-constant="pi">pi</button>
+                    <button type="button" class="btn btn-scientific" data-action="insert-power">x^y</button>
+                    <button type="button" class="btn btn-scientific" data-action="percentage">%</button>
+
+                    <button type="button" class="btn btn-scientific" data-action="insert-function" data-function="sin">sin</button>
+                    <button type="button" class="btn btn-scientific" data-action="insert-function" data-function="cos">cos</button>
+                    <button type="button" class="btn btn-scientific" data-action="insert-function" data-function="tan">tan</button>
                     <button type="button" class="btn btn-scientific" data-action="open-parenthesis">(</button>
                     <button type="button" class="btn btn-scientific" data-action="close-parenthesis">)</button>
-                    <button type="button" class="btn btn-scientific" data-action="percentage">%</button>
+
+                    <button type="button" class="btn btn-scientific" data-action="insert-function" data-function="sqrt">sqrt</button>
+                    <button type="button" class="btn btn-scientific" data-action="insert-function" data-function="log">log</button>
+                    <button type="button" class="btn btn-scientific" data-action="insert-function" data-function="ln">ln</button>
+                    <button type="button" class="btn btn-scientific" data-action="insert-function" data-function="abs">abs</button>
+                    <button type="button" class="btn btn-sign" data-action="toggle-sign">±</button>
 
                     <button type="button" class="btn" data-value="7">7</button>
                     <button type="button" class="btn" data-value="8">8</button>
                     <button type="button" class="btn" data-value="9">9</button>
                     <button type="button" class="btn btn-operator" data-operator="/">÷</button>
-                    <button type="button" class="btn btn-sign" data-action="toggle-sign">±</button>
+                    <button type="button" class="btn btn-scientific" data-action="insert-constant" data-constant="e">e</button>
 
                     <button type="button" class="btn" data-value="4">4</button>
                     <button type="button" class="btn" data-value="5">5</button>
@@ -66,18 +83,77 @@
                 </div>
             </article>
 
-            <aside class="panel historial-container" aria-label="Historial de operaciones">
-                <div class="historial-header">
-                    <div>
-                        <p class="eyebrow">Memoria</p>
-                        <h2>Historial</h2>
+            <div class="side-panels">
+                <aside class="panel grafica-container" aria-label="Representacion grafica de funciones">
+                    <div class="panel-header">
+                        <div>
+                            <p class="eyebrow">Funciones</p>
+                            <h2>Grafica</h2>
+                        </div>
+                        <div class="mode-switch mode-switch-compact" id="graph-trig-mode-controls" aria-label="Modo trigonometrico de la grafica">
+                            <button type="button" class="mode-btn" data-trig-mode="deg">Grados</button>
+                            <button type="button" class="mode-btn" data-trig-mode="rad">Radianes</button>
+                        </div>
                     </div>
-                    <button type="button" class="btn-clear-history" id="clear-history">Borrar</button>
-                </div>
 
-                <ul id="lista-historial" class="bloc-notas"></ul>
-                <p id="historial-vacio" class="historial-vacio">Tus calculos apareceran aqui.</p>
-            </aside>
+                    <div class="graph-form">
+                        <label class="graph-label" for="function-input">f(x)</label>
+                        <div class="graph-input-row">
+                            <input type="text" id="function-input" class="graph-input" value="sin(x)" spellcheck="false" aria-label="Funcion a representar">
+                            <button type="button" class="btn btn-graph-action" id="plot-function">Dibujar</button>
+                        </div>
+
+                        <div class="graph-shortcuts" id="graph-shortcuts">
+                            <button type="button" class="btn btn-shortcut" data-snippet="x">x</button>
+                            <button type="button" class="btn btn-shortcut" data-snippet="^">x^n</button>
+                            <button type="button" class="btn btn-shortcut" data-snippet="sin(">sin</button>
+                            <button type="button" class="btn btn-shortcut" data-snippet="cos(">cos</button>
+                            <button type="button" class="btn btn-shortcut" data-snippet="tan(">tan</button>
+                            <button type="button" class="btn btn-shortcut" data-snippet="sqrt(">sqrt</button>
+                            <button type="button" class="btn btn-shortcut" data-snippet="log(">log</button>
+                            <button type="button" class="btn btn-shortcut" data-snippet="abs(">abs</button>
+                        </div>
+
+                        <div class="graph-range">
+                            <label>
+                                X min
+                                <input type="number" id="x-min" value="-10" step="1">
+                            </label>
+                            <label>
+                                X max
+                                <input type="number" id="x-max" value="10" step="1">
+                            </label>
+                        </div>
+
+                        <div class="graph-eval">
+                            <label for="eval-x">Evaluar en x</label>
+                            <div class="graph-input-row">
+                                <input type="number" id="eval-x" value="0" step="0.5" aria-label="Valor de x para evaluar la funcion">
+                                <output id="graph-result" class="graph-result">f(0) = 0</output>
+                            </div>
+                        </div>
+
+                        <p id="graph-status" class="status" aria-live="polite">Funcion lista para representar</p>
+                    </div>
+
+                    <div class="canvas-shell">
+                        <canvas id="graph-canvas" width="720" height="420" aria-label="Grafica de la funcion"></canvas>
+                    </div>
+                </aside>
+
+                <aside class="panel historial-container" aria-label="Historial de operaciones">
+                    <div class="historial-header">
+                        <div>
+                            <p class="eyebrow">Memoria</p>
+                            <h2>Historial</h2>
+                        </div>
+                        <button type="button" class="btn-clear-history" id="clear-history">Borrar</button>
+                    </div>
+
+                    <ul id="lista-historial" class="bloc-notas"></ul>
+                    <p id="historial-vacio" class="historial-vacio">Tus calculos apareceran aqui.</p>
+                </aside>
+            </div>
         </section>
     </main>
 
