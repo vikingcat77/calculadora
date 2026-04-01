@@ -311,6 +311,8 @@ function appendOperator(operator) {
         return;
     }
 
+    const visibleValue = state.currentInput;
+
     if (state.justCalculated) {
         state.tokens = [state.currentInput];
         state.justCalculated = false;
@@ -336,7 +338,7 @@ function appendOperator(operator) {
         state.tokens.push(operator);
     }
 
-    state.currentInput = "0";
+    state.currentInput = visibleValue;
     state.inputDirty = false;
     updateDisplay();
     updateStatus(`Operador ${formatToken(operator)} seleccionado`);
